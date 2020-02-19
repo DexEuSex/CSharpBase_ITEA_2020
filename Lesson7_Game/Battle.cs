@@ -7,7 +7,6 @@ namespace Lesson7_Game
     class Battle
     {
         public Person Character { get; set; }
-
         public Person Enemy { get; set; }
 
         public Battle(Person character, Person enemy)
@@ -15,7 +14,8 @@ namespace Lesson7_Game
             Character = character;
             Enemy = enemy;
         }
-        public void StartFight()
+
+        public Person Fight()
         {
             while (Character.Alive && Enemy.Alive)
             {
@@ -24,6 +24,8 @@ namespace Lesson7_Game
                 Character.ShowInfo();
                 Enemy.ShowInfo();
             }
+            Console.ReadLine();
+            return Character.Alive ? Character : Enemy;
         }
 
     }

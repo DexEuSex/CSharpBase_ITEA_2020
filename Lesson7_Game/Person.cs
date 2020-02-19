@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Lesson7_Game
 {
-    class Person
+    public class Person : GameObjects
     {
         int id;
         int hp;
@@ -25,10 +24,17 @@ namespace Lesson7_Game
                     hp = value;
             }
         }
-        public bool Alive { get; set; } = true;
+        public int Id
+        {
+            get
+            {
+                return id;
+            }
+        }
         public int Level { get; set; }
         public int Damage { get; set; }
-        public string Name { get; set; }
+        public bool Alive { get; set; } = true;
+        public Map World { get; set; }
 
         public Person(string name, int id)
         {
@@ -39,80 +45,91 @@ namespace Lesson7_Game
             this.id = id;
         }
 
-        public void levelUp()
+        public void LevelUp()
         {
             Level++;
+            HealthPoints += 50;
         }
 
         public void Hit(Person target)
         {
             if (Alive)
             {
-                Random rnd = new Random();
-                target.HealthPoints -= Damage;
-
+                Random random = new Random();
+                target.HealthPoints -= random.Next(Damage - 10, Damage + 11);
                 if (target.HealthPoints == 0)
-                    levelUp();
+                    LevelUp();
             }
-
         }
+
         public void ShowInfo()
         {
-            Console.WriteLine($"My name is {Name}, i have {HealthPoints} hp, my damage is {Damage}, and my level is {Level}");
+            if (Alive)
+                Console.WriteLine($"Hi, I'm {Name}, my hp: {HealthPoints}, dmg: {Damage}, lvl: {Level}");
+            else
+                Console.WriteLine($"{Name} die");
         }
-        public void Move(int[,] map, string direction)
+
+        public override void Interaction(GameObjects obj)
         {
-            int currentPos1 = 0;
-            int currentPos2 = 0;
-            bool find = false;
-            for (int i = 0; i < map.GetLength(0); i++)
+            base.Interaction(obj);
+            if (obj is Person person)
             {
-                for (int k = 0; k < map.GetLength(1); k++)
-                {
-                    if (map[i, k] == id)
-                    {
-                        find = true;
-                        currentPos1 = i;
-                        currentPos2 = k;
-                        map[i, k] = 0;
-                    }
-                }
+                Battle newBattle = new Battle(person, this);
+                Person winner = newBattle.Fight();
             }
-            if (!find)
+        }
+
+        public Position Move(string direction)
+        {
+            Position currentPos = World.GetPersonPosition(this);
+            Cell currentCell = World.GetCell(currentPos);
+
+            if (currentPos == null)
             {
-                Console.WriteLine("Can't find Person with id {0}", id);
-                return;
+                Console.WriteLine("Can't find {0}", Name);
+                return null;
             }
+
             switch (direction)
             {
                 case "w":
-                    if (currentPos1 >= 1)
-                        currentPos1--;
+                    if (currentPos.Pos1 >= 1)
+                        currentPos.Pos1--;
                     break;
                 case "s":
-                    if(currentPos1 <= map.GetLength(0) - 2)
-                        currentPos1++;
+                    if (currentPos.Pos1 <= World.WorldHeight - 2)
+                        currentPos.Pos1++;
                     break;
                 case "d":
-                    if (currentPos2 <= map.GetLength(1) - 2)
-                        currentPos2++;
+                    if (currentPos.Pos2 <= World.WorldWidth - 2)
+                        currentPos.Pos2++;
                     break;
                 case "a":
-                    if (currentPos2 >= 1)
-                        currentPos2--;
+                    if (currentPos.Pos2 >= 1)
+                        currentPos.Pos2--;
                     break;
                 default:
                     break;
             }
-            map[currentPos1, currentPos2] = id;
-        }
-        public void FindSmth(int id)
-        {
-            if (id == -1)
-                HealthPoints += 30;
-            else
+            Cell wantedCell = World.GetCell(currentPos);
 
+            if (wantedCell.IsEmpty())
+            {
+                currentCell.PersonOnCell = null;
+                wantedCell.PersonOnCell = this;
+            }
+            else if (wantedCell.HeartOnCell != null)
+            {
+                wantedCell.HeartOnCell.Interaction(this);
+                World.Refresh();
+            }
+            else if (wantedCell.PersonOnCell != null)
+            {
+                wantedCell.PersonOnCell.Interaction(this);
+                World.Refresh();
+            }
+            return currentPos;
         }
-
     }
 }
