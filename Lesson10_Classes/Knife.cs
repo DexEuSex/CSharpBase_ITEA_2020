@@ -10,7 +10,7 @@ namespace Lesson10_Classes
         public override void StabOrSwing(Weapon type)
         {
             base.StabOrSwing(type);
-            if (type is Weapon sword)
+            if (type is Weapon )
             {
 
             }

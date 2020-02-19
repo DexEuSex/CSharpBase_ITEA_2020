@@ -7,7 +7,7 @@ namespace Lesson10_Classes
     class Weapon
     {
         public string Name { get; set; }
-        public int OneHandedSkillLevel { get; set; } = 3;
+        public static int OneHandedSkillLevel { get; set; }
         public double Damage { get; set; } = 10;
 
         public virtual void StabOrSwing(Weapon type)

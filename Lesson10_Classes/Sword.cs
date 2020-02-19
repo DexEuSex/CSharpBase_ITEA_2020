@@ -11,9 +11,9 @@ namespace Lesson10_Classes
         public override void StabOrSwing(Weapon type)
         {
             base.StabOrSwing(type);
-            if (type is Weapon sword)
+            if (Weapon.OneHandedSkillLevel < OneHandedSkillLevelNeeded)
             {
-
+                Console.WriteLine("Skill level is not to deal full damage. Your damage was reduced to {0}", Damage - 2); ;
             }
         }
     }
