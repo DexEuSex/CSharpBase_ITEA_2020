@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lesson10_Classes
 {
-    class Knife : Weapon;
+    class Knife : Weapon
     {
         public int OneHandedSkillLevelNeeded { get; set; } = 2;
         public override void StabOrSwing(Weapon type)
