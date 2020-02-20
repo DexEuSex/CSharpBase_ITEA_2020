@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Lesson7_Game
 {
     public class Sword : GameObjects, IWeapon
     {
-        public int Damage { get; set; } = 5; 
+        public int Damage { get; set; } = 15; 
         public bool Used { get; set; } = false;
         public string Type { get; set; } = "Sword";
 
@@ -20,9 +18,7 @@ namespace Lesson7_Game
             base.Interaction(obj);
             if (obj is Person person)
             {
-                IWeapon.Type = "Sword";
-                person.Damage += 15;
-                IWeapon.Name = "An old temerian sword";
+                person.Damage += Damage;
                 Used = true;
             }
         }

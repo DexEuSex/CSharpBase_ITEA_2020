@@ -35,7 +35,7 @@ namespace Lesson7_Game
         public int Damage { get; set; }
         public bool Alive { get; set; } = true;
         public Map World { get; set; }
-        public IWeapon Weapon { get; set;} 
+        public IWeapon Weapon { get; set; }
 
         public Person(string name, int id)
         {
@@ -58,7 +58,7 @@ namespace Lesson7_Game
             {
                 Random random = new Random();
                 target.HealthPoints -= random.Next(Damage - 5, Damage + 6);
-                if (random.Next(0, 5) == 4)
+                if (random.Next(0, 2) == 1)
                     Weapon?.SpecialAttack(target);
                 if (target.HealthPoints == 0)
                     LevelUp();
