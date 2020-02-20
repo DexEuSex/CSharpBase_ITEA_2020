@@ -7,7 +7,7 @@ namespace Lesson7_Game
         public string Name { get; set; }
         public virtual void Interaction(GameObjects obj)
         {
-            Console.WriteLine("Interaction: {0} => {1}", Name, obj.Name);
+            Console.WriteLine("\nInteraction: {0} => {1}", Name, obj.Name);
         }
     }
 }

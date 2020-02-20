@@ -57,6 +57,7 @@ namespace Lesson7_Game
 
             if(lootType == 0)
                     world.InitGameObject(sword, lootPos1, lootPos2);
+
             else if(lootType == 1)
                     world.InitGameObject(knife, lootPos1, lootPos2);
             
@@ -76,9 +77,5 @@ namespace Lesson7_Game
             Console.WriteLine(world.Winner(pers) ? "You won!" : "Game over");
         }
         
-        public static async void Anim()
-        {
-            await Task.Delay(1000);
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Lesson7_Game
 {
@@ -18,10 +19,15 @@ namespace Lesson7_Game
             base.Interaction(obj);
             if (obj is Person person)
             {
+                Anim();
                 person.Damage += Damage;
                 Console.WriteLine("You picked up knife! Your damage now is {0}", person.Damage);
                 Used = true;
             }
+        }
+        public static async void Anim()
+        {
+            await Task.Delay(100);
         }
     }
 }
