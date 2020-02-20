@@ -26,35 +26,21 @@ namespace Lesson7_Game
             }
         }
 
-        public bool InitPerson(Person person, int position1, int position2)
+        public bool InitGameObject(GameObjects gameObject, int position1, int position2)
         {
-            return InitPerson(person, new Position(position1, position2));
+            return InitGameObject(gameObject, new Position(position1, position2));
         }
-        public bool InitPerson(Person person, Position position)
+        public bool InitGameObject(GameObjects gameObject, Position position)
         {
             if (position.Pos1 >= 0 && position.Pos2 >= 0 &&
                 position.Pos1 < WorldHeight && position.Pos2 < WorldWidth)
             {
                 Cell wantedCell = Cells[position.Pos1, position.Pos2];
-                if (wantedCell.PersonOnCell == null && wantedCell.HeartOnCell == null)
+                if (wantedCell.GameObject == null)
                 {
-                    wantedCell.PersonOnCell = person;
-                    person.World = this;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool InitPerson(Heart heart, Position position)
-        {
-            if (position.Pos1 >= 0 && position.Pos2 >= 0 &&
-                position.Pos1 < WorldHeight && position.Pos2 < WorldWidth)
-            {
-                Cell wantedCell = Cells[position.Pos1, position.Pos2];
-                if (wantedCell.PersonOnCell == null && wantedCell.HeartOnCell == null)
-                {
-                    wantedCell.HeartOnCell = heart;
+                    wantedCell.GameObject = gameObject;
+                    if (gameObject is Person person)
+                        person.World = this;
                     return true;
                 }
             }
@@ -67,7 +53,7 @@ namespace Lesson7_Game
             {
                 for (int k = 0; k < WorldWidth; k++)
                 {
-                    if (Cells[i, k].PersonOnCell == person)
+                    if (Cells[i, k].GameObject == person)
                         return new Position(i, k);
                 }
             }
@@ -86,16 +72,18 @@ namespace Lesson7_Game
 
         public void Show()
         {
+            Console.Clear();
+            Refresh();
             for (int i = 0; i < WorldHeight; i++)
             {
                 for (int k = 0; k < WorldWidth; k++)
                 {
                     Extensions.ToConsoleWrite("|", ConsoleColor.Green);
-                    if (Cells[i, k].PersonOnCell != null && Cells[i, k].PersonOnCell.Id == 1)
+                    if (Cells[i, k].GameObject != null && Cells[i, k].GameObject is Character)
                         Extensions.ToConsoleWrite("☺", ConsoleColor.Cyan);
-                    else if (Cells[i, k].PersonOnCell != null)
+                    else if (Cells[i, k].GameObject != null && Cells[i, k].GameObject is Enemy)
                         Extensions.ToConsoleWrite("☻", ConsoleColor.Red);
-                    else if (Cells[i, k].HeartOnCell != null)
+                    else if (Cells[i, k].GameObject != null && Cells[i, k].GameObject is Heart)
                         Extensions.ToConsoleWrite("♥", ConsoleColor.Red);
                     else
                         Extensions.ToConsoleWrite(" ");
@@ -110,12 +98,28 @@ namespace Lesson7_Game
             {
                 for (int k = 0; k < WorldWidth; k++)
                 {
-                    if (Cells[i, k].PersonOnCell != null && !Cells[i, k].PersonOnCell.Alive)
-                        Cells[i, k].PersonOnCell = null;
-                    if (Cells[i, k].HeartOnCell != null && Cells[i, k].HeartOnCell.Used)
-                        Cells[i, k].HeartOnCell = null;
+                    if (Cells[i, k].GameObject != null)
+                    {
+                        if (Cells[i, k].GameObject is Heart heart && heart.Used ||
+                            Cells[i, k].GameObject is Person person && !person.Alive)
+                            Cells[i, k].GameObject = null;
+
+                    }
                 }
             }
+        }
+
+        public bool Winner(Person person)
+        {
+            for (int i = 0; i < WorldHeight; i++)
+            {
+                for (int k = 0; k < WorldWidth; k++)
+                {
+                    if (Cells[i, k].GameObject != null && Cells[i, k].GameObject != person)
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }

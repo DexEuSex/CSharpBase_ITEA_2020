@@ -27,6 +27,5 @@ namespace Lesson7_Game
             Console.ReadLine();
             return Character.Alive ? Character : Enemy;
         }
-
     }
 }

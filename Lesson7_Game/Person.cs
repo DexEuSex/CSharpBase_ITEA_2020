@@ -3,7 +3,7 @@
 
 namespace Lesson7_Game
 {
-    public class Person : GameObjects
+    public abstract class Person : GameObjects
     {
         int id;
         int hp;
@@ -35,13 +35,14 @@ namespace Lesson7_Game
         public int Damage { get; set; }
         public bool Alive { get; set; } = true;
         public Map World { get; set; }
+        public IWeapon Weapon { get; set; }
 
         public Person(string name, int id)
         {
             Name = name;
             HealthPoints = 100;
             Level = 1;
-            Damage = 50;
+            Damage = 20;
             this.id = id;
         }
 
@@ -56,7 +57,9 @@ namespace Lesson7_Game
             if (Alive)
             {
                 Random random = new Random();
-                target.HealthPoints -= random.Next(Damage - 10, Damage + 11);
+                target.HealthPoints -= random.Next(Damage - 5, Damage + 6) + (Weapon?.Damage ?? 0);
+                if (random.Next(0, 5) == 4)
+                    Weapon?.SpecialAttack(target);
                 if (target.HealthPoints == 0)
                     LevelUp();
             }
@@ -65,7 +68,7 @@ namespace Lesson7_Game
         public void ShowInfo()
         {
             if (Alive)
-                Console.WriteLine($"Hi, I'm {Name}, my hp: {HealthPoints}, dmg: {Damage}, lvl: {Level}");
+                Console.WriteLine($"{Name}, my hp: {HealthPoints}, dmg: {Damage}, lvl: {Level}");
             else
                 Console.WriteLine($"{Name} die");
         }
@@ -73,63 +76,13 @@ namespace Lesson7_Game
         public override void Interaction(GameObjects obj)
         {
             base.Interaction(obj);
-            if (obj is Person person)
+            if (obj is Person person && person != this)
             {
                 Battle newBattle = new Battle(person, this);
                 Person winner = newBattle.Fight();
             }
         }
 
-        public Position Move(string direction)
-        {
-            Position currentPos = World.GetPersonPosition(this);
-            Cell currentCell = World.GetCell(currentPos);
-
-            if (currentPos == null)
-            {
-                Console.WriteLine("Can't find {0}", Name);
-                return null;
-            }
-
-            switch (direction)
-            {
-                case "w":
-                    if (currentPos.Pos1 >= 1)
-                        currentPos.Pos1--;
-                    break;
-                case "s":
-                    if (currentPos.Pos1 <= World.WorldHeight - 2)
-                        currentPos.Pos1++;
-                    break;
-                case "d":
-                    if (currentPos.Pos2 <= World.WorldWidth - 2)
-                        currentPos.Pos2++;
-                    break;
-                case "a":
-                    if (currentPos.Pos2 >= 1)
-                        currentPos.Pos2--;
-                    break;
-                default:
-                    break;
-            }
-            Cell wantedCell = World.GetCell(currentPos);
-
-            if (wantedCell.IsEmpty())
-            {
-                currentCell.PersonOnCell = null;
-                wantedCell.PersonOnCell = this;
-            }
-            else if (wantedCell.HeartOnCell != null)
-            {
-                wantedCell.HeartOnCell.Interaction(this);
-                World.Refresh();
-            }
-            else if (wantedCell.PersonOnCell != null)
-            {
-                wantedCell.PersonOnCell.Interaction(this);
-                World.Refresh();
-            }
-            return currentPos;
-        }
+        public abstract Position Move(string direction);
     }
 }

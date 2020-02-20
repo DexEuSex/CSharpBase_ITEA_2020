@@ -2,7 +2,7 @@
 
 namespace Lesson7_Game
 {
-    public class GameObjects
+    public abstract class GameObjects
     {
         public string Name { get; set; }
         public virtual void Interaction(GameObjects obj)

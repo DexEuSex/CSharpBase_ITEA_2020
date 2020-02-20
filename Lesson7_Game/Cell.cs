@@ -6,27 +6,20 @@ namespace Lesson7_Game
 {
     public class Cell
     {
-        public Person PersonOnCell { get; set; }
-        public Heart HeartOnCell { get; set; }
+        public GameObjects GameObject { get; set; }
 
         public Cell()
         {
-
         }
 
-        public Cell(Person personOnCell)
+        public Cell(GameObjects gameObject)
         {
-            PersonOnCell = personOnCell;
-        }
-
-        public Cell(Heart heartOnCell)
-        {
-            HeartOnCell = heartOnCell;
+            GameObject = gameObject;
         }
 
         public bool IsEmpty()
         {
-            return PersonOnCell == null && HeartOnCell == null;
+            return GameObject == null;
         }
     }
 }
