@@ -19,6 +19,7 @@ namespace Lesson7_Game
             if (obj is Person person)
             {
                 person.Damage += Damage;
+                Console.WriteLine("You picked up knife! Your damage now is {0}", person.Damage);
                 Used = true;
             }
         }

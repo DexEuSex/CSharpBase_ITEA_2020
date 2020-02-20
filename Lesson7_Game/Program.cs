@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Lesson7_Game
 {
@@ -14,6 +15,7 @@ namespace Lesson7_Game
             Person[] enemies = Enumerable.Range(2, 5).Select(x => new Enemy($"Enemy {x}", x)).ToArray();
             Heart[] hearts = Enumerable.Range(2, 5).Select(x => new Heart()).ToArray();
             Sword sword = new Sword();
+            Knife knife = new Knife();
 
             Map world = new Map(10, 14);
             world.GenerateMap();
@@ -45,11 +47,19 @@ namespace Lesson7_Game
                 } while (!world.InitGameObject(item, pos1, pos2));
 
             }
+
             Random randomiseLootPos1 = new Random();
             Random randomiseLootPos2 = new Random();
+            Random randomiseLootType = new Random();
             int lootPos1 = randomiseLootPos1.Next(0, world.WorldHeight);
             int lootPos2 = randomiseLootPos2.Next(0, world.WorldWidth);
-            world.InitGameObject(sword, lootPos1, lootPos2);
+            int lootType = randomiseLootType.Next(0, 2);
+
+            if(lootType == 0)
+                    world.InitGameObject(sword, lootPos1, lootPos2);
+            else if(lootType == 1)
+                    world.InitGameObject(knife, lootPos1, lootPos2);
+            
 
             while (pers.Alive && !world.Winner(pers))
             {
@@ -66,6 +76,9 @@ namespace Lesson7_Game
             Console.WriteLine(world.Winner(pers) ? "You won!" : "Game over");
         }
         
-        
+        public static async void Anim()
+        {
+            await Task.Delay(1000);
+        }
     }
 }
