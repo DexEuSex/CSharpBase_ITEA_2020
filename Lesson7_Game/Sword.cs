@@ -8,6 +8,7 @@ namespace Lesson7_Game
     {
         public int Damage { get; set; } = 5; 
         public bool Used { get; set; } = false;
+        public string Type { get; set; } = "Sword";
 
         public void SpecialAttack(Person enemy)
         {
@@ -19,7 +20,9 @@ namespace Lesson7_Game
             base.Interaction(obj);
             if (obj is Person person)
             {
-                person.Weapon = "Sword";
+                IWeapon.Type = "Sword";
+                person.Damage += 15;
+                IWeapon.Name = "An old temerian sword";
                 Used = true;
             }
         }

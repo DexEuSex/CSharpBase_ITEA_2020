@@ -35,7 +35,7 @@ namespace Lesson7_Game
         public int Damage { get; set; }
         public bool Alive { get; set; } = true;
         public Map World { get; set; }
-        public IWeapon Weapon { get; set; }
+        public IWeapon Weapon { get; set;} 
 
         public Person(string name, int id)
         {
@@ -49,7 +49,7 @@ namespace Lesson7_Game
         public void LevelUp()
         {
             Level++;
-            HealthPoints += 50;
+            HealthPoints += 10;
         }
 
         public void Hit(Person target)
@@ -57,7 +57,7 @@ namespace Lesson7_Game
             if (Alive)
             {
                 Random random = new Random();
-                target.HealthPoints -= random.Next(Damage - 5, Damage + 6) + (Weapon?.Damage ?? 0);
+                target.HealthPoints -= random.Next(Damage - 5, Damage + 6);
                 if (random.Next(0, 5) == 4)
                     Weapon?.SpecialAttack(target);
                 if (target.HealthPoints == 0)
@@ -68,7 +68,7 @@ namespace Lesson7_Game
         public void ShowInfo()
         {
             if (Alive)
-                Console.WriteLine($"{Name}, my hp: {HealthPoints}, dmg: {Damage}, lvl: {Level}");
+                Console.WriteLine($"{Name}, HP: {HealthPoints}, Damage: {Damage}, Level: {Level}, Weapon: {Weapon}");
             else
                 Console.WriteLine($"{Name} die");
         }

@@ -85,6 +85,8 @@ namespace Lesson7_Game
                         Extensions.ToConsoleWrite("☻", ConsoleColor.Red);
                     else if (Cells[i, k].GameObject != null && Cells[i, k].GameObject is Heart)
                         Extensions.ToConsoleWrite("♥", ConsoleColor.Red);
+                    else if (Cells[i, k].GameObject != null && Cells[i, k].GameObject is Sword)
+                        Extensions.ToConsoleWrite("♦", ConsoleColor.Green);
                     else
                         Extensions.ToConsoleWrite(" ");
                 }
@@ -101,7 +103,8 @@ namespace Lesson7_Game
                     if (Cells[i, k].GameObject != null)
                     {
                         if (Cells[i, k].GameObject is Heart heart && heart.Used ||
-                            Cells[i, k].GameObject is Person person && !person.Alive)
+                            Cells[i, k].GameObject is Person person && !person.Alive ||
+                            Cells[i, k].GameObject is Sword sword && sword.Used)
                             Cells[i, k].GameObject = null;
 
                     }

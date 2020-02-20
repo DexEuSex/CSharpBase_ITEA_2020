@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Lesson7_Game
 {
@@ -12,6 +13,7 @@ namespace Lesson7_Game
 
         public override Position Move(string direction)
         {
+            
             Position currentPos = World.GetPersonPosition(this);
 
             if (currentPos == null)
