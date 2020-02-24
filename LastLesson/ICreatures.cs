@@ -10,8 +10,8 @@ namespace LastLesson
 
         public int Damage { get; set; }
 
-        public int Hp { get; set; }
+        public int HealthPoints { get; set; }
 
-        public void Interaction();
+        public abstract void Interaction(ObjectOnScene target);
     }
 }
