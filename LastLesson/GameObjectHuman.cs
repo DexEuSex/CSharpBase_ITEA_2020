@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LastLesson
 {
-    public class GameObjectHuman
+    public class GameObjectHuman : ObjectOnScene
     {
     }
 }

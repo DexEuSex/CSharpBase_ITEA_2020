@@ -36,11 +36,27 @@ namespace LastLesson
             base.Move();
             // other code
         }
-        public void Interaction(GameObjectHuman aliveTarget, ObjectOnScene inanimateTarget)
+        public void Interaction(ObjectOnScene inanimateTarget)
+        {
+            if (inanimateTarget is ObjectOnScene stone)
+            {
+                // код позволяющий объекту не застрять в текстуре
+            }
+        }
+        public void Interaction(GameObjectHuman aliveTarget)
+        {
+            if (aliveTarget is GameObjectHuman)
+            {
+                FindTarget(aliveTarget);
+                Hit(aliveTarget);
+            }
+        }
+        public void Hit(GameObjectHuman target)
         {
 
         }
-        public void Hit(GameObjectHuman target)
+
+        public void FindTarget(ObjectOnScene target)
         {
 
         }
